@@ -42,6 +42,8 @@ class _MainPageState extends State<MainPage> {
           //背景图片
           return WillPopScope(
               child: Scaffold(
+                ///布局不随键盘动
+                resizeToAvoidBottomInset: false,
                 body: Stack(
                   children: [
                     //背景

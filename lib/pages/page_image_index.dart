@@ -51,6 +51,7 @@ class _Page extends StatelessWidget {
     var init = context.select((IndexData indexData) => indexData.dataInit);
     if (init) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: WAppBar(title: const Text("壁纸~"), actions: [
           StyleButton(
               style: StyleButton.windowMenuButtonStyle(),
@@ -58,7 +59,6 @@ class _Page extends StatelessWidget {
                 App.getRouter().navigateTo(context, Routes.settings);
               },
               child: const Icon(Icons.settings)),
-
           StyleButton(
               style: StyleButton.windowMenuButtonStyle(),
               onPressed: () {
@@ -167,7 +167,8 @@ class _BodyState extends State<_Body> {
             SliverLayoutBuilder(builder: (context, type) {
               LoadData loadData = context.read<LoadData>();
               int length = loadData.imgList.length;
-              int itemCount = ((length % columnItemSize > 0) ? 1 : 0) + length ~/ columnItemSize;
+              int itemCount = ((length % columnItemSize > 0) ? 1 : 0) +
+                  length ~/ columnItemSize;
               return SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
                 return ItemView(
@@ -186,8 +187,10 @@ class _BodyState extends State<_Body> {
 ///图片列表item视图-----------------------------------------------------------------------------------------------
 ///每行显示的图片数量,高度固定，宽度是根据计算得出
 
-typedef ItemClickedCallback = void Function(int position, img.ImageInfo imageInfo);
-typedef DownloadClickedCallback = void Function(int position, img.ImageInfo imageInfo);
+typedef ItemClickedCallback = void Function(
+    int position, img.ImageInfo imageInfo);
+typedef DownloadClickedCallback = void Function(
+    int position, img.ImageInfo imageInfo);
 
 class ItemView extends StatelessWidget {
   const ItemView({
@@ -221,7 +224,8 @@ class ItemView extends StatelessWidget {
                 height: height,
                 //超出部分，可裁剪
                 clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(12)),
                 margin: const EdgeInsets.all(8),
                 child: LayoutBuilder(builder: (context, _) {
                   var data = _getItemData(startIndex + i);
@@ -238,7 +242,8 @@ class ItemView extends StatelessWidget {
     );
   }
 
-  Widget _getItemView(img.ImageInfo data, String name, int startIndex, int position) {
+  Widget _getItemView(
+      img.ImageInfo data, String name, int startIndex, int position) {
     //控制item菜单的显示隐藏
     StateSetter? showItemMenuSetter;
     var hover = false;
@@ -269,7 +274,8 @@ class ItemView extends StatelessWidget {
               ),
             ),
           ),
-          StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
             showItemMenuSetter = setState;
             return Visibility(
               visible: hover,
@@ -302,7 +308,8 @@ class ItemView extends StatelessWidget {
     );
   }
 
-  Widget _getItemViewMobile(img.ImageInfo data, String name, int startIndex, int position) {
+  Widget _getItemViewMobile(
+      img.ImageInfo data, String name, int startIndex, int position) {
     String url = data.thumbURL!;
     return Stack(
       children: [
@@ -326,11 +333,13 @@ class ItemView extends StatelessWidget {
             itemClickedCallback?.call(startIndex + position, data);
           },
           child: Column(children: [
-            Text(data.fromPageTitle ?? "", style: const TextStyle(color: Colors.white)),
+            Text(data.fromPageTitle ?? "",
+                style: const TextStyle(color: Colors.white)),
             const Spacer(),
             Row(
               children: [
-                Text("${data.width}x${data.height}", style: const TextStyle(color: Colors.white)),
+                Text("${data.width}x${data.height}",
+                    style: const TextStyle(color: Colors.white)),
               ],
             )
           ]),
@@ -361,7 +370,10 @@ class _MenuListWidget extends StatelessWidget {
   final OnMenuPressedCallback? onMenuPressedCallback;
 
   const _MenuListWidget(
-      {this.onMenuPressedCallback, this.searchCallback, this.addCallback, this.settingClickedCallback});
+      {this.onMenuPressedCallback,
+      this.searchCallback,
+      this.addCallback,
+      this.settingClickedCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -374,12 +386,16 @@ class _MenuListWidget extends StatelessWidget {
         children: [
           Container(
               margin: const EdgeInsets.only(left: 8, right: 8),
-              child: _SearchView(searchCallback: searchCallback, addCallback: addCallback)),
-          Expanded(child: _MenuListView(onMenuPressedCallback: onMenuPressedCallback)),
+              child: _SearchView(
+                  searchCallback: searchCallback, addCallback: addCallback)),
+          Expanded(
+              child:
+                  _MenuListView(onMenuPressedCallback: onMenuPressedCallback)),
           StyleButton(
               onPressed: settingClickedCallback,
               style: StyleButton.iconButtonCircle(),
-              child: const AspectRatio(aspectRatio: 1, child:  Icon(Icons.chevron_right)))
+              child: const AspectRatio(
+                  aspectRatio: 1, child: Icon(Icons.chevron_right)))
         ],
       ),
     );
@@ -387,7 +403,9 @@ class _MenuListWidget extends StatelessWidget {
 }
 
 class _MenuListView extends StatelessWidget {
-  const _MenuListView({Key? key, this.scrollController, this.onMenuPressedCallback}) : super(key: key);
+  const _MenuListView(
+      {Key? key, this.scrollController, this.onMenuPressedCallback})
+      : super(key: key);
 
   final OnMenuPressedCallback? onMenuPressedCallback;
   final ScrollController? scrollController;
@@ -411,15 +429,17 @@ class _MenuListView extends StatelessWidget {
                 builder: (context, child) {
                   var select = context.watch<SearchMenu>().selected;
                   return StyleButton(
-                    style:
-                        StyleButton.textButtonStyle(backgroundColor: select ? const Color(0xEEFFFFFF) : Colors.black12),
+                    style: StyleButton.textButtonStyle(
+                        backgroundColor:
+                            select ? const Color(0xEEFFFFFF) : Colors.black12),
                     onPressed: () {
                       var menu = menus[index];
                       onMenuPressedCallback?.call(index, menu);
                     },
                     child: Text(
                       menus[index].showText ?? "",
-                      style: TextStyle(color: select ? Colors.black : Colors.white60),
+                      style: TextStyle(
+                          color: select ? Colors.black : Colors.white60),
                     ),
                   );
                 });
@@ -430,7 +450,8 @@ class _MenuListView extends StatelessWidget {
 
 ///search 搜索按钮
 class _SearchView extends StatefulWidget {
-  const _SearchView({Key? key, this.searchCallback, this.addCallback}) : super(key: key);
+  const _SearchView({Key? key, this.searchCallback, this.addCallback})
+      : super(key: key);
   final MenuSearchCallback? searchCallback;
   final MenuAddCallback? addCallback;
 
@@ -484,60 +505,68 @@ class _SearchViewState extends State<_SearchView> {
             style: StyleButton.iconButtonCircle(radius: 36),
             child: AspectRatio(
               aspectRatio: 1,
-              child: Icon(_searchOpen ? Icons.close : Icons.search, color: _searchOpen ? Colors.black : Colors.white),
+              child: Icon(_searchOpen ? Icons.close : Icons.search,
+                  color: _searchOpen ? Colors.black : Colors.white),
             ),
           ),
-          Expanded(
-              child: TextField(
-            controller: _editController,
-            onChanged: (text) {
-              _text = text;
-            },
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              fillColor: Colors.transparent,
-              filled: true,
-              hintText: '壁纸',
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.all(Radius.circular(100))),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: BorderRadius.all(Radius.circular(100))),
-            ),
-            onSubmitted: (value) {
-              widget.searchCallback?.call(value);
-            },
-          )),
           Visibility(
               visible: _animEnd && _searchOpen,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  StyleButton(
-                      onPressed: () {
-                        widget.searchCallback?.call(_text);
+              child: Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                        child: TextField(
+                      controller: _editController,
+                      onChanged: (text) {
+                        _text = text;
                       },
-                      style: StyleButton.iconButtonCircle(
-                        backgroundColor: Colors.black12,
-                        radius: 36,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                        fillColor: Colors.transparent,
+                        filled: true,
+                        hintText: '壁纸',
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100))),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100))),
                       ),
-                      child: const AspectRatio(aspectRatio: 1, child: Icon(Icons.search_sharp, color: Colors.black))),
-                  StyleButton(
-                      onPressed: () {
-                        //添加菜单项目
-                        widget.addCallback?.call(_text, true);
+                      onSubmitted: (value) {
+                        widget.searchCallback?.call(value);
                       },
-                      style: StyleButton.iconButtonCircle(
-                        backgroundColor: Colors.black12,
-                        radius: 36,
-                      ),
-                      child: const AspectRatio(
-                        aspectRatio: 1,
-                        child: Icon(Icons.add, color: Colors.black),
-                      ))
-                ],
+                    )),
+                    StyleButton(
+                        onPressed: () {
+                          widget.searchCallback?.call(_text);
+                        },
+                        style: StyleButton.iconButtonCircle(
+                          backgroundColor: Colors.black12,
+                          radius: 36,
+                        ),
+                        child: const AspectRatio(
+                            aspectRatio: 1,
+                            child:
+                                Icon(Icons.search_sharp, color: Colors.black))),
+                    StyleButton(
+                        onPressed: () {
+                          //添加菜单项目
+                          widget.addCallback?.call(_text, true);
+                        },
+                        style: StyleButton.iconButtonCircle(
+                          backgroundColor: Colors.black12,
+                          radius: 36,
+                        ),
+                        child: const AspectRatio(
+                          aspectRatio: 1,
+                          child: Icon(Icons.add, color: Colors.black),
+                        ))
+                  ],
+                ),
               ))
         ],
       ),

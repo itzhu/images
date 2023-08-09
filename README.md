@@ -8,6 +8,11 @@
 支持android\windows。 
 
 其他平台可能需要测试权限或文件夹是否可读取，没有测试过。
+环境：
+JAVA 11.
+dart 2.18.0
+gradle 7.6.2
+AS 2022.3.1
 
 具体查看lib\apis\ImagesApi.dart
 

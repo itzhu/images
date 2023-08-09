@@ -26,6 +26,9 @@ class AButtonCommon {
     //  overlayColor: MaterialStateProperty.all(Colors.transparent),
     //  surfaceTintColor: MaterialStateProperty.all(Colors.transparent),
 
+    //去除按钮周围的margin
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+
     //阴影
     elevation: MaterialStateProperty.all(0),
     //side: MaterialStateProperty.all(const BorderSide(width: 0)),
@@ -98,7 +101,8 @@ class StyleButton extends ElevatedButton {
       {Color? backgroundColor, Size? minimumSize, EdgeInsetsGeometry? padding, double? radius}) {
     return ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        minimumSize: minimumSize,
+        minimumSize: minimumSize??Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius ?? 120)));
   }
 
